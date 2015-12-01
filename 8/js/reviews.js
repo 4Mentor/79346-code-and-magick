@@ -5,8 +5,8 @@
 /* global reviews: true */
 (function() {
   var reviewsFilter = document.querySelector('.reviews-filter');
-  reviewsFilter.classList.add('invisible');
   var container = document.querySelector('.reviews-list');
+  reviewsFilter.classList.add('invisible');
 
   reviews.forEach(function(review) {
     var element = getElementFromTemplate(review);
@@ -19,15 +19,18 @@
    */
   function getElementFromTemplate(data) {
     var template = document.querySelector('#review-template');
+    var element;
     if ('content' in template) {
-      var element = template.content.children[0].cloneNode(true);
+      element = template.content.children[0].cloneNode(true);
     } else {
       element = template.children[0].cloneNode(true);
     }
     element.querySelector('.review-rating').textContent = data.rating;
     element.querySelector('.review-text').textContent = data.description;
 
-    var avatarImage = new Image();
+    var defaultAuthor = element.querySelector('.review-author');
+    var avatarImage = new Image(124, 124);
+    var IMAGE_TIMEOUT = 10000;
 
     var imageLoadTimeout = setTimeout(function() {
       avatarImage.src = '';
@@ -36,17 +39,15 @@
 
     avatarImage.onload = function() {
       clearTimeout(imageLoadTimeout);
-      //тут может не работает потому что у меня адрес неправильный, мне же надо выйти из папки джс верно? Я вообще не очень понимаю что здесь творится с этими экранизациями
-      element.style.avatarImage = 'url(\'' + avatarImage.src + '\')';
+      element.replaceChild(avatarImage, defaultAuthor);
     };
+
     avatarImage.onerror = function() {
       element.classList.add('review-load-failure');
     };
-    avatarImage.src = '/' + data.picture;
 
-    var IMAGE_TIMEOUT = 10000;
-
-
+    avatarImage.src = data.author.picture;
     return element;
   }
+  reviewsFilter.classList.remove('invisible');
 })();
