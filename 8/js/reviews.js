@@ -29,6 +29,7 @@
     element.querySelector('.review-text').textContent = data.description;
 
     var defaultAuthor = element.querySelector('.review-author');
+    defaultAuthor.title = data.author.name;
     var avatarImage = new Image(124, 124);
     var IMAGE_TIMEOUT = 10000;
 
@@ -39,6 +40,7 @@
 
     avatarImage.onload = function() {
       clearTimeout(imageLoadTimeout);
+      avatarImage.classList.add('review-author');
       element.replaceChild(avatarImage, defaultAuthor);
     };
 
@@ -47,6 +49,7 @@
     };
 
     avatarImage.src = data.author.picture;
+    avatarImage.title = data.author.name;
     return element;
   }
   reviewsFilter.classList.remove('invisible');
