@@ -7,7 +7,6 @@
   var reviewsFilter = document.querySelector('.reviews-filter');
   var container = document.querySelector('.reviews-list');
   var reviews;
-  var reviewsForSort;
   var filteredArray;
   var reviewFilter = document.getElementsByName('reviews');
 
@@ -21,8 +20,7 @@
       }
     }
 
-    var helpingArray;
-    reviewsForSort = reviews.slice();
+    var helpingArray = reviews.slice();
 
     function isGood(value) {
       return value.rating > 2;
@@ -62,19 +60,19 @@
         filteredArray = reviews;
         break;
       case 'reviews-recent':
-        helpingArray = reviewsForSort.filter(isRecent);
+        helpingArray = helpingArray.filter(isRecent);
         filteredArray = helpingArray.sort(compareDate);
         break;
       case 'reviews-good':
-        helpingArray = reviewsForSort.filter(isGood);
+        helpingArray = helpingArray.filter(isGood);
         filteredArray = helpingArray.sort(compareGoodReviews);
         break;
       case 'reviews-bad':
-        helpingArray = reviewsForSort.filter(isBad);
+        helpingArray = helpingArray.filter(isBad);
         filteredArray = helpingArray.sort(compareBadReviews);
         break;
       case 'reviews-popular':
-        filteredArray = reviewsForSort.sort(comparePopularity);
+        filteredArray = helpingArray.sort(comparePopularity);
         break;
     }
   };
@@ -117,8 +115,10 @@
 
   var drawingReviews = function() {
     filteredArray.forEach(function(review) {
+      var fragment = document.createDocumentFragment();
       var element = getElementFromTemplate(review);
-      container.appendChild(element);
+      fragment.appendChild(element);
+      container.appendChild(fragment);
     });
     reviewsFilter.classList.remove('invisible');
   };
@@ -135,6 +135,7 @@
       //предварительная фильтрация отзывов
       filteringReviews(reviews);
       //отрисовка отзывов
+      container.innerHTML = '';
       drawingReviews(filteredArray);
     };
     xhr.ontimeout = function() {
@@ -150,6 +151,7 @@
 
   for (var i = 0; i < reviewFilter.length; i++) {
     reviewFilter[i].onclick = function() {
+      container.innerHTML = '';
       filteringReviews();
       drawingReviews(filteredArray);
     };
