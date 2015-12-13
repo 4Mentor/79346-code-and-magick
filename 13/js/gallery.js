@@ -57,15 +57,11 @@
   var gallery = new Gallery();
   var photogallery = document.querySelector('.photogallery');
 
-  function _onClick(event) {
-    event.preventDefault();
-    gallery.show();
-  }
-
   photogallery.onclick = function(event) {
     var clickedElement = event.target;
     if (clickedElement.tagName === 'IMG') {
-      clickedElement.addEventListener('click', _onClick);
+      event.preventDefault();
+      gallery.show();
     }
   };
 })();
