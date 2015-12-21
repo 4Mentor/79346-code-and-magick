@@ -4,13 +4,22 @@
 'use strict';
 /* global Gallery: true, Photo: true */
 ( function() {
-  var arrLinks = document.querySelectorAll('.photogallery-image img');
+  var arrLinks = document.querySelectorAll('.photogallery-image');
 
-  var ArrayPhoto = [].map.call(arrLinks, function(img, i) {
+  /**
+   * Делаем массив из элементов Photo
+   * @type {Array}
+   */
+  var arrayPhoto = [].map.call(arrLinks, function(img, i) {
     img = arrLinks[i].getElementsByTagName('img');
+    img = img[0].cloneNode(true);
     return new Photo(img);
   });
 
+  /**
+   * @type {Gallery}
+   */
   var gallery = new Gallery();
-  gallery.setPictures(ArrayPhoto);
+  gallery.setPictures(arrayPhoto);
+  window.gallery = gallery;
 })();
