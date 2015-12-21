@@ -74,7 +74,7 @@
     }
     preview.appendChild(photo.getPhoto());
     var numCur = number + 1;
-    var numTot = this._photos.length - 1;
+    var numTot = this._photos.length;
     numberCurrent.innerHTML = '' + numCur;
     numberTotal.innerHTML = '' + numTot;
   };
@@ -119,7 +119,7 @@
    * @private
    */
   Gallery.prototype._onRightClick = function() {
-    if (this._currentPicture + 1 < this._photos.length - 1) {
+    if (this._currentPicture < this._photos.length - 1) {
       this.setCurrentPicture(this._currentPicture + 1);
     }
   };
@@ -129,7 +129,7 @@
    * Обработчик события клика на фотографии фотогалереи
    * @param {Event} event
    */
-  for (var i = 0; i < photogalleryImages.length - 1; i++) {
+  for (var i = 0; i < photogalleryImages.length; i++) {
     photogalleryImages[i].onclick = (function(index) {
       return function(event) {
         event.preventDefault();
