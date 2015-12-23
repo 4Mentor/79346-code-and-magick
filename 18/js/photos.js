@@ -2,7 +2,7 @@
  * Created by Julia on 18.12.2015.
  */
 'use strict';
-/* global Gallery: true, Photo: true */
+/* global Gallery: true, Photo: true,  onHashChange: true */
 ( function() {
   var arrLinks = document.querySelectorAll('.photogallery-image');
 
@@ -22,4 +22,5 @@
   var gallery = new Gallery();
   gallery.setPictures(arrayPhoto);
   window.gallery = gallery;
+  onHashChange();
 })();

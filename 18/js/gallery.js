@@ -40,6 +40,7 @@
    */
   Gallery.prototype.hide = function() {
     this.element.classList.add('invisible');
+    location.hash = '';
 
     this._previousButton.removeEventListener('click', this._onLeftClick);
     this._nextButton.removeEventListener('click', this._onRightClick);
@@ -61,7 +62,7 @@
    * @returns {string}
    */
   Gallery.prototype.returnSrc = function(index) {
-    return this._photos[index].src;
+    return this._photos[index].getSrc();
   };
 
   /**
@@ -70,26 +71,35 @@
    * @param {number|string} data
    */
   Gallery.prototype.setCurrentPicture = function(data) {
+    var photo;
+    var numCur;
+    var photos = this._photos;
+    if (typeof data === 'number') {
+      this._currentPicture = data;
+      photo = photos[data];
+    } else if (typeof data === 'string') {
+      photos.forEach(function(element, i) {
+        if (photos[i].getSrc() === data) {
+          photo = element;
+          numCur = i;
+        }
+      });
+    }
+    this._currentPicture = numCur;
+    this._renderPhoto(photo, numCur);
+  };
 
+  Gallery.prototype._renderPhoto = function(photo, numCur) {
     var preview = document.querySelector('.overlay-gallery-preview');
     var numberCurrent = document.querySelector('.preview-number-current');
     var numberTotal = document.querySelector('.preview-number-total');
-    var photo;
-    if (typeof data === 'number') {
-      this._currentPicture = data;
-      photo = this._photos[data];
-    } else if (typeof data === 'string') {
-      //каким-то магическим образом я нахожу фотографию по пути
-      photo = '';
-    }
 
     var oldPhoto = preview.querySelector('img');
     if (oldPhoto) {
       preview.removeChild(oldPhoto);
     }
     preview.appendChild(photo.getPhoto());
-    //тут у меня все ломается
-    var numCur = data + 1;
+    numCur = numCur + 1;
     var numTot = this._photos.length;
     numberCurrent.innerHTML = '' + numCur;
     numberTotal.innerHTML = '' + numTot;
@@ -99,8 +109,9 @@
    * Обработчик события клика по кнопке, закрывающей галерею
    * @private
    */
-  Gallery.prototype._onCloseClick = function() {
-    location.hash = '';
+  Gallery.prototype._onCloseClick = function(event) {
+    event.preventDefault();
+    this.hide();
   };
 
   /**
@@ -126,7 +137,7 @@
    */
   Gallery.prototype._onLeftClick = function() {
     if (this._currentPicture > 0) {
-      this.setCurrentPicture(this._currentPicture - 1);
+      location.hash = '#photo/' + this.returnSrc(this._currentPicture - 1);
     }
   };
 
@@ -136,7 +147,7 @@
    */
   Gallery.prototype._onRightClick = function() {
     if (this._currentPicture < this._photos.length - 1) {
-      this.setCurrentPicture(this._currentPicture + 1);
+      location.hash = '#photo/' + this.returnSrc(this._currentPicture + 1);
     }
   };
 
@@ -154,15 +165,18 @@
     })(i);
   }
 
-  //на каком этапе я заполняю стринг ...
-  window.addEventListener('hashchange', function(string) {
+  var onHashChange = function() {
     var REG_EXP = /#photo\/(\S+)/;
-    if (string.match(REG_EXP)) {
+    if (location.hash.match(REG_EXP)) {
       gallery.show();
-      gallery.setCurrentPicture(string);
+      var srcString = location.hash.substr(7);
+      gallery.setCurrentPicture(srcString);
     } else {
       gallery.hide();
     }
-  });
+  };
+
+  window.addEventListener('hashchange', onHashChange);
   window.Gallery = Gallery;
+  window.onHashChange = onHashChange;
 })();
