@@ -7,7 +7,6 @@ requirejs.config({
 
 define([
   'form',
-  'gallery',
   'photos',
   'reviews'
 ], function() {
@@ -784,4 +783,4 @@ define([
   var game = new Game(document.querySelector('.demo'));
   game.initializeLevelAndStart();
   game.setGameStatus(window.Game.Verdict.INTRO);
-})();
+});

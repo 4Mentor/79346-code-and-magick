@@ -52,4 +52,4 @@ define( function() {
   };
 
   return Review;
-})();
+});

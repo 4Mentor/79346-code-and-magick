@@ -3,10 +3,7 @@
  */
 'use strict';
 /* global define: true */
-define([
-  'photos',
-  'hash-change'
-], function(gallery, onHashChange) {
+define(function() {
   /**
    * Конструктор галереи
    * @constructor
@@ -153,20 +150,5 @@ define([
     }
   };
 
-  var photogalleryImages = document.querySelectorAll('.photogallery-image');
-  /**
-   * Обработчик события клика на фотографии фотогалереи
-   * @param {Event} event
-   */
-  for (var i = 0; i < photogalleryImages.length; i++) {
-    photogalleryImages[i].onclick = (function(index) {
-      return function(event) {
-        event.preventDefault();
-        location.hash = '#photo/' + gallery.returnSrc(index);
-      };
-    })(i);
-  }
-
-  window.addEventListener('hashchange', onHashChange);
   return Gallery;
-})();
+});

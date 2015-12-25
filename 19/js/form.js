@@ -159,4 +159,4 @@ define(function() {
     docCookies.setItem('mark', valueCurrentRadio, expDate);
     docCookies.setItem('name', formReviewName.value, expDate);
   };
-})();
+});

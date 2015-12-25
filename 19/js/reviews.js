@@ -218,4 +218,4 @@ define([
     }
     drawingReviews(currentPage, false);
   };
-})();
+});
